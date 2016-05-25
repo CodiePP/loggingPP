@@ -1,16 +1,17 @@
 # logging in C++
 
 ## generate source code
-
+go to the code directory and run the script:
 ```
 cd loggingPP
 cd src/Cpp
 ./mk_loggingpp.sh
 ```
 
+## compile
+back in the root directory of the project
 ```
-cd ../../
-cmake -D CMAKE_BUILD_TYPE=Debug
+cmake -D CMAKE_BUILD_TYPE=Debug .
 make -j 4
 ```
 
