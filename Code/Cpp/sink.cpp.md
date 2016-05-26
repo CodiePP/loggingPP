@@ -27,6 +27,8 @@ Sink::~Sink()
 {
     _pimpl->_unavailable = true;
 
+    if (_pimpl) {
+        std::clog << "~Sink " << _pimpl->_nproc << std::endl; }
     if (_pimpl->snk) {
         boost::lock_guard<boost::mutex> _lock(_pimpl->_sebiglogg);
         // wait for all data flushed

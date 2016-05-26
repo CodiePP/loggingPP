@@ -11,7 +11,9 @@ cd src/Cpp
 ## compile
 back in the root directory of the project
 ```
-cmake -D CMAKE_BUILD_TYPE=Debug .
+mkdir BUILD
+cd BUILD
+cmake -D CMAKE_BUILD_TYPE=Debug ..
 make -j 4
 ```
 

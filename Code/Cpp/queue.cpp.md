@@ -22,7 +22,10 @@ layout: default
         }
         
         Q::~Q()
-        { }
+        {
+            if (_pimpl) {
+                std::clog << "~Q " << _pimpl->_nproc << std::endl; }
+        }
 ~~~
 
 ## ready

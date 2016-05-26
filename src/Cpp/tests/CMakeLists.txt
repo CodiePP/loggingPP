@@ -30,7 +30,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         ${SRCS}
     )
     target_link_libraries ( ${PROJECT_NAME}
-        LoggingPP_${CMAKE_BUILD_TYPE}
+        loggingPP_${CMAKE_BUILD_TYPE}
         ${OPENSSL_LIBRARIES}
         ${Boost_LIBRARIES}
     )
@@ -42,7 +42,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "DebugProfile")
     )
     set_target_properties(p${PROJECT_NAME} PROPERTIES LINK_FLAGS "-fprofile-arcs -ftest-coverage ")
     target_link_libraries ( p${PROJECT_NAME}
-        LoggingPP_p${CMAKE_BUILD_TYPE}
+        loggingPP_p${CMAKE_BUILD_TYPE}
         ${OPENSSL_LIBRARIES}
         #gcov
         ${Boost_LIBRARIES}
