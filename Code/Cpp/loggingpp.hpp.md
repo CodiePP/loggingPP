@@ -25,6 +25,14 @@ public:
 
 >enum loglevel { LOG_LEVEL_ERROR=0, LOG_LEVEL_WARNING, LOG_LEVEL_INFO, LOG_LEVEL_DEBUG };
 
+> static void [flush](loggingpp.cpp.md)();
+
+> static unsigned long [queued](loggingpp.cpp.md)();
+
+> static unsigned long [processed](loggingpp.cpp.md)();
+
+> static unsigned long [logged](loggingpp.cpp.md)();
+
 >static std::shared_ptr\\< LoggingPP \\> singleton();
         
 ~~~ { .cpp }
@@ -56,13 +64,13 @@ public:
 
 >loglevel getLogLevel() const { return _curr_log_level; }
         
->void [flush](loggingpp.cpp.md)() const;
-        
->unsigned long [queued](loggingpp.cpp.md)() const;
+>//void [flush](loggingpp.cpp.md)() const;
 
->unsigned long [processed](loggingpp.cpp.md)() const;
+>//unsigned long [queued](loggingpp.cpp.md)() const;
 
->unsigned long [logged](loggingpp.cpp.md)() const;
+>//unsigned long [processed](loggingpp.cpp.md)() const;
+
+>//unsigned long [logged](loggingpp.cpp.md)() const;
         
 >void [attachSink](loggingpp.cpp.md)(const std::shared_ptr\\<Sink\\> p_sink);
         

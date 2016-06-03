@@ -26,6 +26,7 @@
                 if (_config->has("LoggingPP.NumThreads"))
                 {
                         _config->get("LoggingPP.NumThreads", n_thr);
+                        std::clog << " setting threads to #" << n_thr << std::endl;
                         if (n_thr < 1 || n_thr > 4)
                         {
                                 n_thr = 1;
@@ -58,15 +59,18 @@
                     {
                         while (_queue->ready())
                         {
-                            _pool->enqueue(boost::bind(& LPP ::Sink::log2sink, _sink.get(), _queue->dequeue()));
-                            boost::this_thread::yield();
+                            _pool->enqueue(boost::bind(& LPP::Sink::log2sink, _sink.get(), _queue->dequeue()));
+                            //boost::this_thread::yield();
                         }
+                        //std::clog << "queue empty: proc=" << _queue->processed() << std::endl;
                     } else {
                         std::clog << "sink not ready!!" << std::endl;
                     }
                     boost::this_thread::sleep(boost::posix_time::milliseconds(sleep_time));
                 }
             }
+            void flush() const;
+
             std::unique_ptr<boost::thread> _thr;
             std::unique_ptr<Configuration> _config;
             std::unique_ptr< LPP ::ThreadPool> _pool;
@@ -95,36 +99,38 @@
             return _singleton;
         }
         
-        void LoggingPP::flush() const
+        void LoggingPP::flush() { singleton()->_pimpl->flush(); }
+
+        void LoggingPP::pimpl::flush() const
         {
-            while (_pimpl->_queue->ready())
+            int n=0;
+            while ((n=_queue->queued()) > 0)
             {
+                std::clog << "   queue has: " << n << std::endl;
                 boost::this_thread::sleep(boost::posix_time::milliseconds(20));
             }
             std::clog << "  queue is finally empty!" << std::endl;
-            if (_pimpl->_sink) {
-                while (_pimpl->_sink->busy())
-                {
-                    boost::this_thread::sleep(boost::posix_time::milliseconds(20));
-                }
-                std::clog << "  sink's sunk!" << std::endl;
+            while (_sink && _sink->busy())
+            {
+                boost::this_thread::sleep(boost::posix_time::milliseconds(20));
             }
+            std::clog << "  sink's sunk!" << std::endl;
         }
         
-        unsigned long LoggingPP::queued() const
+        unsigned long LoggingPP::queued()
         {
-            return _pimpl->_queue->queued();
+            return singleton()->_pimpl->_queue->queued();
         }
         
-        unsigned long LoggingPP::processed() const
+        unsigned long LoggingPP::processed()
         {
-            return _pimpl->_queue->processed();
+            return singleton()->_pimpl->_queue->processed();
         }
         
-        unsigned long LoggingPP::logged() const
+        unsigned long LoggingPP::logged()
         {
-            if (_pimpl->_sink) {
-                return _pimpl->_sink->processed(); }
+            if (singleton()->_pimpl->_sink) {
+                return singleton()->_pimpl->_sink->processed(); }
             return 0UL;
         }
         

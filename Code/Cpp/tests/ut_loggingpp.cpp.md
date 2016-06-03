@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE( no_warning_because_below_error )
     const char msg[] = "no message";
     LPP_LOG_WARNING(obj, msg);
 
-    LPP::LoggingPP::singleton()->flush();
+    LPP::LoggingPP::flush();
     BOOST_CHECK_EQUAL(LPP::LoggingPP::singleton()->queued(), 0 );
     BOOST_CHECK_EQUAL(LPP::LoggingPP::singleton()->processed(), 0 );
     BOOST_CHECK_EQUAL(LPP::LoggingPP::singleton()->logged(), 0 );
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE( logging_some_class )
     const char msg[] = "it is me!!";
     LPP_LOG_WARNING(obj, msg);
 
-    LPP::LoggingPP::singleton()->flush();
+    LPP::LoggingPP::flush();
     BOOST_CHECK_EQUAL(LPP::LoggingPP::singleton()->queued(), 0 );
     BOOST_CHECK(LPP::LoggingPP::singleton()->processed() >= 1 );
     BOOST_CHECK_EQUAL(LPP::LoggingPP::singleton()->logged(), 1 );
@@ -116,18 +116,21 @@ BOOST_AUTO_TEST_CASE( time_to_log )
         LPP_LOG_WARNING(obj, msg);
         obj += i;
     }
-    LPP::LoggingPP::singleton()->flush();
+    LPP::LoggingPP::flush();
 
     boost::chrono::thread_clock::time_point t1 = boost::chrono::thread_clock::now();
+
+    usleep(500*1000);
+
     std::ostringstream _ss;
     _ss << " time spent in the calling thread: " << (t1 - t0) / n << " per log message.";
     BOOST_TEST_MESSAGE( _ss.str() );
-    BOOST_CHECK_EQUAL(LPP::LoggingPP::singleton()->queued(), 0 );
-    BOOST_CHECK(LPP::LoggingPP::singleton()->processed() >= 1 );
+    BOOST_CHECK_EQUAL(LPP::LoggingPP::queued(), 0 );
+    BOOST_CHECK(LPP::LoggingPP::processed() >= 1 );
     _ss.str(""); _ss.clear();
-    _ss << " processed: " << LPP::LoggingPP::singleton()->processed();
+    _ss << " processed: " << LPP::LoggingPP::processed();
     BOOST_TEST_MESSAGE( _ss.str() );
-    BOOST_CHECK_EQUAL(LPP::LoggingPP::singleton()->logged(), n );
+    BOOST_CHECK_EQUAL(LPP::LoggingPP::logged(), n );
 }
 ~~~
 
@@ -149,15 +152,18 @@ BOOST_AUTO_TEST_CASE( time_to_log2 )
         LPPLOG(LPP::LoggingPP::LOG_LEVEL_WARNING) << LPPVAR(obj) << msg;
         obj += i;
     }
-    LPP::LoggingPP::singleton()->flush();
+    LPP::LoggingPP::flush();
 
     boost::chrono::thread_clock::time_point t1 = boost::chrono::thread_clock::now();
+
+    usleep(500*1000);
+
     std::ostringstream _ss;
     _ss << " time spent in the calling thread: " << (t1 - t0) / n << " per log message.";
     BOOST_TEST_MESSAGE( _ss.str() );
-    BOOST_CHECK_EQUAL(LPP::LoggingPP::singleton()->queued(), 0 );
-    BOOST_CHECK(LPP::LoggingPP::singleton()->processed() >= 1 );
-    BOOST_CHECK_EQUAL(LPP::LoggingPP::singleton()->logged(), n );
+    BOOST_CHECK_EQUAL(LPP::LoggingPP::queued(), 0 );
+    BOOST_CHECK(LPP::LoggingPP::processed() >= 1 );
+    BOOST_CHECK_EQUAL(LPP::LoggingPP::logged(), n );
 }
 ~~~
 

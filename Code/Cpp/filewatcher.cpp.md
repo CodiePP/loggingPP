@@ -26,7 +26,7 @@ void FileWatcher::pimpl::run() throw()
             boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
         }
     } catch (...) {
-        std::clog << " some catch .. " << std::endl;
+        std::clog << " ending .. " << std::endl;
     }
 }
 
